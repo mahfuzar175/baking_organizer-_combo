@@ -411,6 +411,30 @@
       </a>
     </section>
 
+    <!-- ============ VIDEO / DEMO SECTION ============ -->
+    <section class="max-w-4xl mx-auto px-5 pb-10">
+      <div
+        id="video-player"
+        class="w-full aspect-video rounded-lg relative overflow-hidden bg-gray-200 cursor-pointer"
+        onclick="playDemoVideo()"
+      >
+        <img
+          data-img="videoThumbnail"
+          alt=""
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center"
+          >
+            <div
+              class="w-0 h-0 border-t-8 border-b-8 border-l-[14px] border-t-transparent border-b-transparent border-l-white ml-1"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ INTRO / DESCRIPTION SECTION ============ -->
     <section class="bg-[#FDECEA] py-12">
       <div class="max-w-3xl mx-auto px-5 text-center">
@@ -898,10 +922,12 @@
         phone: "+8809643330000",
         whatsappPhone: "01894842442",
         productName: "Baking & Organizer Combo",
-        sku: "BOC02",
+        sku: "BOC01",
         tagline: "৩-ইন-১ কিচেন এসেনশিয়াল সেট",
+        // মেইন ফাইলের মতোই রাখা হলো, পরে আসল ডেমো ভিডিও আইডি দিয়ে বদলে দেবেন
+        demoVideoId: "dDnDfgsNu5E",
         description:
-          "রান্নাঘরের গোছানো ও বেকিং প্রস্তুতি এখন হবে আরও সহজ! এই ৩-ইন-১ কম্বো সেটে রয়েছে সিলিকন বেকিং ম্যাট, রোলিং এগ স্টোরেজ বক্স এবং ৪ কম্পার্টমেন্টের মশলা বক্স — প্রতিদিনের রান্না ও বেকিং দুটোকেই করে তুলবে আরও গোছানো ও ঝামেলামুক্ত। আলাদা আলাদা কেনার বদলে একসাথে পেয়ে যাচ্ছেন সম্পূর্ণ কিচেন সলিউশন, যা প্রিয়জনকে গিফট দেওয়ার জন্যও দারুণ একটি চয়েস।",
+          "রান্নাঘরের গোছানো ও বেকিং প্রস্তুতি এখন হবে আরও সহজ! এই ৩-ইন-১ কম্বো সেটে রয়েছে সিলিকন বেকিং ম্যাট, রোলিং এগ স্টোরেজ বক্স এবং ৪ কম্পার্টমেন্টের মশলা বক্স প্রতিদিনের রান্না ও বেকিং দুটোকেই করে তুলবে আরও গোছানো ও ঝামেলামুক্ত। আলাদা আলাদা কেনার বদলে একসাথে পেয়ে যাচ্ছেন সম্পূর্ণ কিচেন সলিউশন, যা প্রিয়জনকে গিফট দেওয়ার জন্যও দারুণ একটি চয়েস।",
         images: {
           hero: "https://storage.biddabari.online/biddabari-bucket/uploads/all/prodhan_asset/baking_organizer_combo_asset/hero.webp",
           feature: "https://storage.biddabari.online/biddabari-bucket/uploads/all/prodhan_asset/baking_organizer_combo_asset/hero.webp",
@@ -909,17 +935,17 @@
         },
         items: [
           {
-            image: "",
+            image: "https://storage.biddabari.online/biddabari-bucket/uploads/all/prodhan_asset/baking_organizer_combo_asset/silicone_baking_mat.webp",
             title: "সিলিকন বেকিং ম্যাট",
             desc: "নন-স্টিক, হিট রেজিস্ট্যান্ট, বাটার পেপারের প্রয়োজন দূর করে দেয়।",
           },
           {
-            image: "",
+            image: "https://storage.biddabari.online/biddabari-bucket/uploads/all/prodhan_asset/baking_organizer_combo_asset/egg_box_tray.webp",
             title: "রোলিং এগ স্টোরেজ বক্স",
             desc: "অটোমেটিক রোলিং ডিজাইনে ডিম সাজিয়ে রাখা যায়, ফ্রিজে জায়গা বাঁচায়।",
           },
           {
-            image: "",
+            image: "https://storage.biddabari.online/biddabari-bucket/uploads/all/prodhan_asset/baking_organizer_combo_asset/masala_box.webp",
             title: "৪ কম্পার্টমেন্ট মশলা বক্স",
             desc: "ট্রান্সপারেন্ট লিড ও ক্যারি হ্যান্ডেল সহ, মশলা গুছিয়ে রাখা সহজ।",
           },
@@ -997,6 +1023,10 @@
         // image bindings — swap in a placeholder when no URL is configured
         document.querySelectorAll("[data-img]").forEach((el) => {
           const key = el.getAttribute("data-img");
+          if (key === "videoThumbnail") {
+            el.src = `https://img.youtube.com/vi/${CONFIG.demoVideoId}/hqdefault.jpg`;
+            return;
+          }
           const url = CONFIG.images[key];
           if (url) {
             el.src = url;
@@ -1216,6 +1246,19 @@
             orderForm.dispatchEvent(new Event("submit", { cancelable: true }));
           }
         });
+      }
+
+      // ভিডিও থাম্বনেইলে ক্লিক করলে ইউটিউব ভিডিও এমবেড হয়ে অটোপ্লে শুরু হবে
+      function playDemoVideo() {
+        const wrap = document.getElementById("video-player");
+        wrap.innerHTML = `<iframe
+          class="w-full h-full"
+          src="https://www.youtube.com/embed/${CONFIG.demoVideoId}?autoplay=1&rel=0"
+          title="Product demo video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>`;
       }
 
       /* ══ URGENCY TIMER ══ */
